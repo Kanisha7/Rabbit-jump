@@ -9,17 +9,44 @@ const RabbitGame = () => {
   const [jumping, setJumping] = useState(false);
   const [score, setScore] = useState(0);
   const [gameOver, setGameOver] = useState(false);
+  const [audioUnlocked, setAudioUnlocked] = useState(false);
 
   const rabbitRef = useRef(null);
   const obstacleRef = useRef(null);
   const jumpSound = useRef(new Audio(jumpSoundFile));
   const gameOverSound = useRef(new Audio(gameOverSoundFile));
 
+  // Unlock audio on first interaction
+  useEffect(() => {
+    const unlockAudio = () => {
+      jumpSound.current.play().catch(() => {});
+      jumpSound.current.pause();
+      jumpSound.current.currentTime = 0;
+
+      gameOverSound.current.play().catch(() => {});
+      gameOverSound.current.pause();
+      gameOverSound.current.currentTime = 0;
+
+      setAudioUnlocked(true);
+
+      window.removeEventListener("keydown", unlockAudio);
+      window.removeEventListener("touchstart", unlockAudio);
+    };
+
+    window.addEventListener("keydown", unlockAudio);
+    window.addEventListener("touchstart", unlockAudio);
+
+    return () => {
+      window.removeEventListener("keydown", unlockAudio);
+      window.removeEventListener("touchstart", unlockAudio);
+    };
+  }, []);
+
   // Jump action
   const handleJump = () => {
     if (!jumping && !gameOver) {
       setJumping(true);
-      jumpSound.current.play();
+      if (audioUnlocked) jumpSound.current.play().catch(() => {});
       setTimeout(() => setJumping(false), 500);
     }
   };
@@ -33,7 +60,7 @@ const RabbitGame = () => {
       const rabbitBottom = jumping ? 150 : 0;
 
       if (obstacleLeft < 100 && obstacleLeft > 50 && rabbitBottom < 50) {
-        gameOverSound.current.play();
+        if (audioUnlocked) gameOverSound.current.play().catch(() => {});
         setGameOver(true);
         clearInterval(interval);
       }
@@ -44,7 +71,7 @@ const RabbitGame = () => {
     }, 50);
 
     return () => clearInterval(interval);
-  }, [jumping, gameOver]);
+  }, [jumping, gameOver, audioUnlocked]);
 
   // Spacebar jump
   useEffect(() => {
@@ -52,8 +79,11 @@ const RabbitGame = () => {
       if (e.code === "Space") handleJump();
     };
     window.addEventListener("keydown", handleKeyDown);
-    return () => window.removeEventListener("keydown", handleKeyDown);
-  });
+
+    return () => {
+      window.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [jumping, gameOver, audioUnlocked]);
 
   // Reset game
   const resetGame = () => {
@@ -62,7 +92,8 @@ const RabbitGame = () => {
   };
 
   return (
-    <div className="game-container">
+    // Attach touch event directly to container
+    <div className="game-container" onTouchStart={handleJump}>
       <div className="score">Score: {score}</div>
 
       <div

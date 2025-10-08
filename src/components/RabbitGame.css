@@ -8,6 +8,14 @@
   margin: 50px auto;
   border-radius: 15px;
 }
+/*
+.game-container {
+  width: 100vw;
+  height: 100vh;
+  position: relative;
+  overflow: hidden;
+  touch-action: none; /* Important for mobile taps */
+
 
 .rabbit {
   position: absolute;

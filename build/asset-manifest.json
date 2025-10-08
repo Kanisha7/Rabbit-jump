@@ -1,0 +1,18 @@
+{
+  "files": {
+    "main.css": "/static/css/main.e2501c58.css",
+    "main.js": "/static/js/main.56c482d9.js",
+    "static/media/rabbit.png": "/static/media/rabbit.30e764781cced46e72b0.png",
+    "static/media/obstacle.png": "/static/media/obstacle.a2bbd72a4cc771932427.png",
+    "static/media/background.jpg": "/static/media/background.56039457d19e7b8d7f71.jpg",
+    "static/media/gameover.mp3": "/static/media/gameover.21c74c34f50a8ecedde0.mp3",
+    "static/media/jump.mp3": "/static/media/jump.8589b4ebaa272a8a03d5.mp3",
+    "index.html": "/index.html",
+    "main.e2501c58.css.map": "/static/css/main.e2501c58.css.map",
+    "main.56c482d9.js.map": "/static/js/main.56c482d9.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.e2501c58.css",
+    "static/js/main.56c482d9.js"
+  ]
+}
